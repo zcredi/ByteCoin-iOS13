@@ -48,6 +48,13 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         let selecCurrency = coinManager.currencyArray[row]
         coinManager.getCoinPrice(for: selecCurrency)
     }
+    
+    func didUpdateCoin(_ coinManager: CoinManager, coin: CoinModel) {
+        DispatchQueue.main.async {
+//            self.bitcoinLabel.text =
+            print(String(coin.rate))
+        }
+    }
 
 }
 
