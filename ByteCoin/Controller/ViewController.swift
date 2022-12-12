@@ -10,7 +10,8 @@ import UIKit
 
 class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDelegate {
     
-    let coinManager = CoinManager()
+    
+    var coinManager = CoinManager()
     
     // Определям, сколько столбцов мы хотим в нашем сборщике.
     
@@ -31,6 +32,7 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
     
     override func viewDidLoad() {
         super.viewDidLoad()
+        coinManager.delegate = self
         currencyPicker.dataSource = self
         currencyPicker.delegate = self
         
@@ -48,13 +50,18 @@ class ViewController: UIViewController, UIPickerViewDataSource, UIPickerViewDele
         let selecCurrency = coinManager.currencyArray[row]
         coinManager.getCoinPrice(for: selecCurrency)
     }
-    
-    func didUpdateCoin(_ coinManager: CoinManager, coin: CoinModel) {
-        DispatchQueue.main.async {
-//            self.bitcoinLabel.text =
-            print(String(coin.rate))
-        }
-    }
 
 }
 
+extension ViewController: CoinManagerDelegate {
+
+    func didUpdatePrice(price: String, currency: String) {
+        DispatchQueue.main.async {
+            self.bitcoinLabel.text = price
+            self.currencyLabel.text = currency
+        }
+    }
+    func didFailWithError(error: Error) {
+        print(error)
+    }
+}
